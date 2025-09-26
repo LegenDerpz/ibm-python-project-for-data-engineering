@@ -44,7 +44,6 @@ def extract():
     return extracted_data
 
 def transform(data):
-    # print(type(flo(data.price)))
     data["price"] = pd.to_numeric(data["price"], errors="coerce")
     data['price'] = round(data.price, 2)
     
