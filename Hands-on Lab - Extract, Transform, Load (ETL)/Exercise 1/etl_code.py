@@ -2,9 +2,11 @@ import glob
 import pandas as pd
 import xml.etree.ElementTree as ET
 from datetime import datetime as dt
+from pathlib import Path
 
-log_file = "log_file.txt"
-target_file = "transformed_data.csv"
+dir = Path(__file__).parent
+log_file = f"{dir}/log_file2.txt"
+target_file = f"{dir}/transformed_data.csv"
 
 def extract_from_csv(file_to_process):
     df = pd.read_csv(file_to_process)
@@ -29,14 +31,14 @@ def extract_from_xml(file_to_process):
 def extract():
     extracted_data = pd.DataFrame(columns=['name', 'height', 'weight'])
     
-    for csvfile in glob.glob("*.csv"):
+    for csvfile in glob.glob(f"{dir}/data/*.csv"):
         if csvfile != target_file:
             extracted_data = pd.concat([extracted_data, pd.DataFrame(extract_from_csv(csvfile))], ignore_index=True)
             
-    for jsonfile in glob.glob("*.json"):
+    for jsonfile in glob.glob(f"{dir}/data/*.json"):
         extracted_data = pd.concat([extracted_data, pd.DataFrame(extract_from_json(jsonfile))], ignore_index=True)
         
-    for xmlfile in glob.glob("*.xml"):
+    for xmlfile in glob.glob(f"{dir}/data/*.xml"):
         extracted_data = pd.concat([extracted_data, pd.DataFrame(extract_from_xml(xmlfile))], ignore_index=True)
         
     return extracted_data
